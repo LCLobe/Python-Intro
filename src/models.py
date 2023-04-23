@@ -38,19 +38,11 @@ class Post(Base):
     id = Column(Integer(), primary_key=True)
     owner_id = Column(Integer(), ForeignKey("user.id"))
     
-    content = Column(String(250), unique=False, nullable=True)
-    planet_media = relationship("Planet", back_populates="planet.post")
-    character_media = relationship("Character", back_populates="character.post")
-    #post_properties = (String(250), nullable=Falsle) #stringify(objecto propiedades)
-    #
-    #media_id = Column(Integer(), ForeignKey("planet.id"), ForeignKey("character.id"))
-    #
+    planet_media = Column(Integer(), ForeignKey("planet.id"))
+    character_media = Column(Integer(), ForeignKey("character.id"))
+    vehicule_media = Column(Integer(), ForeignKey("vehicule.id"))
 
     favourites = relationship("Favourites", back_populates="favourites.post")
-    
-    
-
-
 
 class Planet(Base):
     __tablename__ = 'planet'
@@ -63,8 +55,7 @@ class Planet(Base):
     #
     post = relationship("Post", back_populates="post.planet_media")
     #
-    born_here = relationship("Character", back_populates="character.id")
-    
+    born_here = relationship("Character", back_populates="character.id") 
    
 
 class Character(Base):
@@ -81,20 +72,17 @@ class Character(Base):
     #
     origin_planet = Column(Integer(), ForeignKey("planet.id"))
 
-    
-   
-# class Media(Base):
-#     __tablename__ = 'media'
-#     id = Column(Integer(), primary_key=True)
-#     type = Column(Enum(), nullable=False)
-#     url = Column(String(250), nullable=False)
-#     post_id = Column(Integer(), ForeignKey("post.id"))
-#     post = relationship("Post", back_populates="media")
 
-#     def to_dict(self):
-#         return {}
+class Vehicule(Base):
+    __tablename__ = 'vehicule'
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(250), nullable=False)
 
-## Draw from SQLAlchemy base
+    capacity = Column(String(250), nullable=True)
+    speed = Column(String(250), nullable=True)
+    #
+    post = relationship("Post", back_populates="post.vehicule_media")
+
 try:
     result = render_er(Base, 'diagram.png')
     print("Success! Check the diagram.png file")
